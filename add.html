@@ -12,22 +12,25 @@
 
 <div class="container">
   <h2>User Details</h2>
-  <form method="post">
+  <form method="post" id="add_form">
     <div class="form-group">
       <label for="email">User Id:</label>
       <input type="text" class="form-control" id="userId" placeholder="Enter User Id" name="userId">
+	  <span id="Err1" style="font-size:100%; "></span>
     </div>
     <div class="form-group">
       <label for="pwd">Title:</label>
       <input type="text" class="form-control" id="title" placeholder="Enter title" name="title">
+	  <span id="Err2" style="font-size:100%; "></span>
     </div>
 	<div class="form-group">
       <label for="pwd">Body:</label>
       <input type="text" class="form-control" id="body" placeholder="Enter body" name="body">
+	  <span id="Err3" style="font-size:100%; "></span>
     </div>
 	
     
-    <button type="submit" class="btn btn-success" id="Save">Submit</button>
+    <button type="button" class="btn btn-success" id="Save">Submit</button>
 	<a href="index.html"><button type="button" class="btn btn-danger" >Back</button></a>
   </form>
 </div>
@@ -41,23 +44,58 @@
                  var person = new Object();  
                  person.userId = $('#userId').val();  
                  person.title = $('#title').val();  
-				 person.body = $('#body').val(); 		 
+				 person.body = $('#body').val();
+
+               if (person.userId == "")
+    {
+    $("#Err1").html("Enter User Id").css("color", "red");
+    $("#userId").focus();
+    return false;
+    }
+    else{
+      $("#Err1").html("");
+    }			
+
+
+   if (person.title == "")
+    {
+    $("#Err2").html("Enter Title").css("color", "red");
+    $("#title").focus();
+    return false;
+    }
+    else{
+      $("#Err2").html("");
+    }			
+
+
+if (person.body == "")
+    {
+    $("#Err3").html("Enter Body").css("color", "red");
+    $("#body").focus();
+    return false;
+    }
+    else{
+      $("#Err3").html("");
+    }				
+       				 
                 $.ajax({
             type: 'POST',
             url: 'https://jsonplaceholder.typicode.com/posts',
+			crossDomain: true,
             data: JSON.stringify(person),
-			//data: {title: 'foo123',body: 'bar123',userId: 19,},
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-			success: function (data, textStatus, xhr) {  
+			success: function (data) {  
 			
-                         console.log(data); 
-                       return confirm('User Added');							 
+                         console.log(data);
+						 $('#add_form')[0].reset();
+                        return confirm('User Added');						 
+                       						 
                      },  
                      error: function (xhr, textStatus, errorThrown) { 
                         alert("error");					 
                          console.log('Error in Operation');  
-						  return confirm('User Added');			
+							
                      }  
         });
              });  

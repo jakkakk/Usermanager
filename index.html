@@ -20,13 +20,13 @@
   <table class="table" id="tableData">
     <thead>
       <tr>
-        
+        <th> <input type="checkbox" id="selectAll" /></th>
         <th>Id</th>
 		<th>UserId</th>
         <th>Title</th>
 		<th>Body</th>
 		<th>Edit</th>
-		<th>Delete</th>
+		
       </tr>
     </thead>
     <tbody id="emp_body">
@@ -36,6 +36,7 @@
   <div id="pager" align="center">
 		<ul id="pagination" class="pagination-sm"></ul>
 	</div>
+	<button type="button" id="delete_records">Delete Users</button>
 </div>
 
 
@@ -66,6 +67,7 @@
 		$('#emp_body').html('');
 		for (var i = 0; i < displayRecords.length; i++) {
 			tr = $('<tr/>');
+			tr.append('<td><input type="checkbox" name="checkedvalues" class="emp_checkbox" data-emp-id='+displayRecords[i].id+' /></td>');
 			tr.append("<td>" + displayRecords[i].id + "</td>");
 			tr.append("<td>" + displayRecords[i].userId + "</td>");
 			tr.append("<td>" + displayRecords[i].title + "</td>");
@@ -109,6 +111,45 @@ $.ajax({
                      }  
                  });  
 }
+</script>
+
+<script>
+$('#selectAll').click(function (e) {
+    $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+});
+
+</script>
+
+<script>
+    $(document).ready(function(){
+       $('#delete_records').on('click', function(e) {
+var employee = [];
+$(".emp_checkbox:checked").each(function() {
+employee.push($(this).data('emp-id'));
+});
+if(employee.length <=0) { alert("Please select records."); }
+var selected_values = employee.join(",");
+
+$.ajax({  
+                     url: 'https://jsonplaceholder.typicode.com/posts/'+selected_values,  
+                     type: 'DELETE',  
+                     dataType: 'json',  
+                     success: function (data) {  
+                         console.log(data); 
+                        alert('Users Deleted');						 
+						 location.reload(true);
+                     },  
+                     error: function (xhr, textStatus, errorThrown) {  
+                         console.log('Error in Operation');  
+						 location.reload(true);
+                     }  
+                 });  
+
+
+
+
+    });
+	});
 </script>
 
 

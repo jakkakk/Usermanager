@@ -16,20 +16,23 @@
     <div class="form-group">
       <label for="email">User Id:</label>
       <input type="text" class="form-control" id="userId" placeholder="Enter User Id" name="userId" value="">
+	  <span id="Err1" style="font-size:100%; "></span>
     </div>
     <div class="form-group">
       <label for="pwd">Title:</label>
       <input type="text" class="form-control" id="title" placeholder="Enter title" name="title" value="">
+	  <span id="Err2" style="font-size:100%; "></span>
     </div>
 	<div class="form-group">
       <label for="pwd">Body:</label>
       <input type="text" class="form-control" id="body" placeholder="Enter body" name="body" value="">
+	  <span id="Err3" style="font-size:100%; "></span>
 	  
 	  <input type="hidden" class="form-control" id="id" name="id" value="">
     </div>
 	
     
-    <button type="submit" class="btn btn-success" id="Save">Update</button>
+    <button type="button" class="btn btn-success" id="Save">Update</button>
 	<a href="index.html"><button type="button" class="btn btn-danger" >Back</button></a>
   </form>
 </div>
@@ -75,7 +78,39 @@ for (var i = 0; i < url.length; i++) {
 				 person.id = $('#id').val();
                  person.userId = $('#userId').val();  
                  person.title = $('#title').val();  
-				 person.body = $('#body').val();			 
+				 person.body = $('#body').val();	
+
+if (person.userId == "")
+    {
+    $("#Err1").html("Enter User Id").css("color", "red");
+    $("#userId").focus();
+    return false;
+    }
+    else{
+      $("#Err1").html("");
+    }			
+
+
+   if (person.title == "")
+    {
+    $("#Err2").html("Enter Title").css("color", "red");
+    $("#title").focus();
+    return false;
+    }
+    else{
+      $("#Err2").html("");
+    }			
+
+
+if (person.body == "")
+    {
+    $("#Err3").html("Enter Body").css("color", "red");
+    $("#body").focus();
+    return false;
+    }
+    else{
+      $("#Err3").html("");
+    }							 
                 $.ajax({
             type: 'PUT',
             url: 'https://jsonplaceholder.typicode.com/posts/'+person.id,
@@ -86,6 +121,8 @@ for (var i = 0; i < url.length; i++) {
 			success: function (data, textStatus, xhr) {  
 			
                          console.log(data);  
+					
+						 return confirm('User Updated');	
                      },  
                      error: function (xhr, textStatus, errorThrown) { 
                         alert("error");					 
